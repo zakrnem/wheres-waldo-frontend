@@ -9,7 +9,9 @@ function Header({ time }) {
   return (
     <div className={styles.container}>
       <div className={styles.logo}>
-        <a href="https://github.com/zakrnem/" className={styles.title}>Where's Wally?</a>
+        <a href="https://github.com/zakrnem/" className={styles.title}>
+          Where's Wally?
+        </a>
         <div className={styles.rules}>
           Find all the characters as soon as possible
         </div>

@@ -19,11 +19,8 @@
   --quaternary-color: #008ebc;
 }
 
-
-
 #root {
   display: flex;
-  gap: 0.75rem;
   flex-direction: column;
   flex: 1 0 auto;
   max-width: 100%;

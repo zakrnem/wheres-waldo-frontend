@@ -4,9 +4,9 @@
 }
 
 @font-face {
-    font-family: "Body";
-    src: url("../assets/BreeSerif-Regular.ttf") format("truetype");
-  }
+  font-family: "Body";
+  src: url("../assets/BreeSerif-Regular.ttf") format("truetype");
+}
 
 .container {
   display: flex;
@@ -40,11 +40,10 @@
 }
 
 .time {
-    font-family: Title;
-    font-weight: bold;
-    font-size: 2.5rem;
+  font-family: Title;
+  font-weight: bold;
+  font-size: 2.5rem;
 }
-
 
 .characters {
   display: flex;
