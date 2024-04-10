@@ -1,14 +1,15 @@
-import { useState } from 'react'
-import './App.css'
-
+import { useState } from "react";
+import "./App.css";
+import Header from "./Header/Header";
 
 function App() {
+  const time = "00:00";
 
   return (
     <>
-      <div className="title">Where's waldo</div>
+      <Header time={time} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
