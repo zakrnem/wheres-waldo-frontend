@@ -3,26 +3,24 @@ import { Outlet, Route, Routes } from "react-router-dom";
 import Gameboard from "./Gameboard/Gameboard";
 import Leaderboard from "./Leaderboard/Leaderboard";
 import Homepage from "./Homepage/Homepage";
-import MessageWindow from "./MessageWindow/MessageWindow";
+import ErrorPage from "./ErrorPage/ErrorPage";
 
 function App() {
   const [time, setTime] = useState("00:00");
-  const [message, setMessage] = useState({
-    title: "Title",
-    message: "Message lorem ipsum dolorum",
-    state: true,
-  });
+  const [error, setError] = useState({ state: false });
 
   return (
     <>
-
       <Outlet />
 
-      <Routes>
+      <Routes errorElement={<ErrorPage error={error} setError={setError} />}>
         <Route path="" element={<Homepage />} />
         <Route path="/play" element={<Gameboard time={time} />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route path="*" element={<MessageWindow />} />
+        <Route
+          path="*"
+          element={<ErrorPage error={error} setError={setError} />}
+        />
       </Routes>
     </>
   );

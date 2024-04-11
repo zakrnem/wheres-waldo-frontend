@@ -1,0 +1,30 @@
+.error {
+  background-image: url("../assets/waldo-homepage.png");
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.window {
+  max-width: 70ch;
+}
+
+.window > h1 {
+  font-size: 5rem;
+  color: var(--tertiary-color)
+}
+
+.window > p {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--quaternary-color)
+}
+
+.window > button {
+  margin-top: 2rem;
+  background-color: var(--tertiary-color);
+  color: white;
+  font-weight: bolder;
+  font-size: 2rem;
+}
