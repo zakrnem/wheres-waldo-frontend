@@ -1,10 +1,10 @@
 import Gameboard from "../Gameboard/Gameboard";
 import styles from "./Body.module.css";
 
-function Body() {
+function Body({ message, setMessage }) {
   return (
-    <div className={styles.container}>
-      <Gameboard />
+    <div className={styles.body}>
+      <Gameboard message={message} setMessage={setMessage} />
     </div>
   );
 }
