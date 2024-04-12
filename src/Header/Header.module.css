@@ -8,7 +8,7 @@
   src: url("../assets/BreeSerif-Regular.ttf") format("truetype");
 }
 
-.container {
+.header {
   display: flex;
   gap: 0.5rem;
   justify-content: space-between;

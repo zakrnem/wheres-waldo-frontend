@@ -12,13 +12,13 @@
 
 .window > h1 {
   font-size: 5rem;
-  color: var(--tertiary-color)
+  color: var(--tertiary-color);
 }
 
 .window > p {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--quaternary-color)
+  color: var(--quaternary-color);
 }
 
 .window > button {

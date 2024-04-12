@@ -1,0 +1,25 @@
+.selmenu {
+    display: grid;
+    justify-items: center;
+    gap: 0.3rem;
+    width: fit-content;
+}
+
+.mcharacter {
+    display: inline;
+    background-color: var(--dark-color);
+    color: white;
+    font-size: 0.9rem;
+}
+
+.mcharacter > img {
+    height: 3rem;
+    margin-bottom: 0.2rem;
+}
+
+.circle {
+    border: dashed 3px red;
+    border-radius: 50%;
+    width: 3.5rem;
+    height: 3.5rem;
+}

@@ -1,23 +1,24 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import styles from "./ErrorPage.module.css";
 
 function ErrorPage({ error, setError }) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   useEffect(() => {
     if (!error.state) {
       setError({
         title: "Oops!",
-        message: "The page you're looking for doesn't seem to exist. Please check the URL and try again.",
+        message:
+          "The page you're looking for doesn't seem to exist. Please check the URL and try again.",
         state: true,
-    })
+      });
     }
-  })
+  });
 
   const handleClick = (e) => {
-    e.preventDefault()
-    navigate("/")
-  }
+    e.preventDefault();
+    navigate("/");
+  };
 
   return (
     <div className={styles.error}>

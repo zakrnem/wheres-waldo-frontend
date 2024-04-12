@@ -8,7 +8,7 @@ import Logo from "./Logo";
 
 function Header({ time }) {
   return (
-    <div className={styles.container}>
+    <div className={styles.header}>
       <Logo styles={styles} />
       <div className={styles.time}>{time}</div>
 
