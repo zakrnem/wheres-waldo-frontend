@@ -8,6 +8,7 @@ import ErrorPage from "./ErrorPage/ErrorPage";
 function App() {
   const [time, setTime] = useState("00:00");
   const [error, setError] = useState({ state: false });
+  const [menuVisible, setMenuVisible] = useState(false);
 
   return (
     <>
@@ -15,7 +16,16 @@ function App() {
 
       <Routes errorElement={<ErrorPage error={error} setError={setError} />}>
         <Route path="" element={<Homepage />} />
-        <Route path="/play" element={<Gameboard time={time} />} />
+        <Route
+          path="/play"
+          element={
+            <Gameboard
+              time={time}
+              menuVisible={menuVisible}
+              setMenuVisible={setMenuVisible}
+            />
+          }
+        />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route
           path="*"

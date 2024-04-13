@@ -1,25 +1,32 @@
 .selmenu {
-    display: grid;
-    justify-items: center;
-    gap: 0.3rem;
-    width: fit-content;
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  position: absolute;
 }
 
 .mcharacter {
-    display: inline;
-    background-color: var(--dark-color);
-    color: white;
-    font-size: 0.9rem;
+  display: inline;
+  background-color: var(--dark-color);
+  border-radius: 1.5rem;
+  opacity: 0.9;
+  color: white;
+  font-size: 0.9rem;
 }
 
 .mcharacter > img {
-    height: 3rem;
-    margin-bottom: 0.2rem;
+  height: 3rem;
+  margin-bottom: 0.2rem;
 }
 
 .circle {
-    border: dashed 3px red;
-    border-radius: 50%;
-    width: 3.5rem;
-    height: 3.5rem;
+  border: dashed 0.8ch black;
+  background-color: black;
+  border: dashed 0.7ch white;
+  opacity: 0.5;
+  border-radius: 50%;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-bottom: 0.2rem;
 }
