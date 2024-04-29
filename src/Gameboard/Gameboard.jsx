@@ -7,6 +7,27 @@ import { useEffect, useState } from "react";
 function Gameboard({ time, menuVisible, setMenuVisible }) {
   const [position, setPosition] = useState([0, 0]);
   const [coordinates, setCoordinates] = useState([0,0])
+  const gameboardId = "66244310eee0531455982e73"
+
+  useEffect(() => {
+    const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/start`
+    fetch(apiURL, {
+      method: "post",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.status !== 200) {
+          console.log(response.statusText)
+          throw new Error(response.statusText);
+        }
+        console.log(response)
+        return response.json();
+      })
+  }, [])
 
   useEffect(() => {
     console.log("Inner html position: ", position)
