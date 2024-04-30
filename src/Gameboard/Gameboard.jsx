@@ -3,11 +3,25 @@ import styles from "./Gameboard.module.css";
 import Header from "../Header/Header";
 import SelectionMenu from "../SelectionMenu/SelectionMenu";
 import { useEffect, useState } from "react";
+import { useStopwatch, useTimer } from 'react-timer-hook';
 
 function Gameboard({ time, menuVisible, setMenuVisible }) {
   const [position, setPosition] = useState([0, 0]);
   const [coordinates, setCoordinates] = useState([0,0])
   const gameboardId = "66244310eee0531455982e73"
+
+  const {
+    totalSeconds,
+    seconds,
+    minutes,
+    isRunning,
+    start,
+    pause,
+    resume,
+    restart,
+  } = useStopwatch({ autoStart: false });
+
+  const timeVal = `${minutes}:${seconds}`
 
   useEffect(() => {
     const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/start`
@@ -20,15 +34,23 @@ function Gameboard({ time, menuVisible, setMenuVisible }) {
       },
     })
       .then((response) => {
-        if (response.status !== 200) {
-          console.log(response.statusText)
-          throw new Error(response.statusText);
+        if (!response.ok) {
+          throw new Error(
+            `This is an HTTP error: The status is ${response.status}`,
+          );
+        } else {
+          start()
         }
+        return response.json()
+      })
+      .then((response) => {
         console.log(response)
-        return response.json();
+      })
+      .catch((error) => {
+        console.log(error.message);
       })
   }, [])
-
+  
   useEffect(() => {
     console.log("Inner html position: ", position)
     console.log("Absolute coordinates: ", coordinates)
@@ -51,7 +73,7 @@ function Gameboard({ time, menuVisible, setMenuVisible }) {
   };
   return (
     <div className={styles.gameboard}>
-      <Header time={time} />
+      <Header time={timeVal} />
       <img src={gameImage} id="gameimage" className={styles.gameboard} onClick={handleClick} />
       <SelectionMenu
         menuVisible={menuVisible}
