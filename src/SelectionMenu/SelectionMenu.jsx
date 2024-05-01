@@ -9,7 +9,10 @@ function SelectionMenu({ menuVisible, setMenuVisible, position }) {
   return (
     <>
       {menuVisible && (
-        <div className={styles.selmenu} style={{position: 'absolute', top: position[1], left: position[0]}}>
+        <div
+          className={styles.selmenu}
+          style={{ position: "absolute", top: position[1], left: position[0] }}
+        >
           <div className={styles.circle}></div>
           <MenuCharacter image={waldo} name={"Waldo"} styles={styles} />
           <MenuCharacter image={wenda} name={"Wenda"} styles={styles} />

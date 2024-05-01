@@ -6,7 +6,6 @@ import Homepage from "./Homepage/Homepage";
 import ErrorPage from "./ErrorPage/ErrorPage";
 
 function App() {
-  const [time, setTime] = useState("00:00");
   const [error, setError] = useState({ state: false });
   const [menuVisible, setMenuVisible] = useState(false);
 
@@ -20,7 +19,6 @@ function App() {
           path="/play"
           element={
             <Gameboard
-              time={time}
               menuVisible={menuVisible}
               setMenuVisible={setMenuVisible}
             />
