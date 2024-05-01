@@ -10,14 +10,16 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [timeString, setTimeString] = useState("00:00");
+  const [characterId, setCharacterId] = useState("");
 
+  // Stopwatch
   useEffect(() => {
     let intervalId;
     if (isRunning) {
       intervalId = setInterval(() => setTime(time + 1), 1000);
     }
     const minutes = Math.floor(time / 60);
-    const seconds = (time > 59) ? time-(60*(Math.floor(time/60))) : time;
+    const seconds = time > 59 ? time - 60 * Math.floor(time / 60) : time;
     setTimeString(
       `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`,
     );
@@ -25,6 +27,7 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
     return () => clearInterval(intervalId);
   }, [isRunning, time]);
 
+  // Start stopwatch request
   useEffect(() => {
     const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/start`;
     fetch(apiURL, {
@@ -41,7 +44,7 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
             `This is an HTTP error: The status is ${response.status}`,
           );
         } else {
-          setIsRunning(true)
+          setIsRunning(true);
         }
         return response.json();
       })
@@ -49,12 +52,12 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
         console.log(response);
       })
       .catch((error) => {
-        getCurrentTime()
+        getCurrentTime();
         console.log(error.message);
       });
   }, []);
 
-  const getCurrentTime = async() => {
+  const getCurrentTime = async () => {
     const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/current`;
     await fetch(apiURL, {
       method: "post",
@@ -73,16 +76,16 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
         return response.json();
       })
       .then((response) => {
-        const currentTime = Math.floor(response.time)
-        setTime(currentTime)
-        setIsRunning(true)
+        const currentTime = Math.floor(response.time);
+        setTime(currentTime);
+        setIsRunning(true);
       })
       .catch((error) => {
         console.log(error.message);
       });
-  }
+  };
 
-  const getScore = async() => {
+  const getScore = async () => {
     const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/end`;
     await fetch(apiURL, {
       method: "post",
@@ -101,18 +104,19 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
         return response.json();
       })
       .then((response) => {
-        console.log("Score: ", response.time)
-        const currentTime = Math.floor(response.time)
-        setTime(currentTime)
-        setIsRunning(false)
+        console.log("Score: ", response.time);
+        const currentTime = Math.floor(response.time);
+        setTime(currentTime);
+        setIsRunning(false);
       })
       .catch((error) => {
         console.log(error.message);
       });
-  }
+  };
 
+  // Log user input
   useEffect(() => {
-    console.log("Inner html position: ", position);
+    // console.log("Inner html position: ", position);
     console.log("Absolute coordinates: ", coordinates);
   }, [position, coordinates]);
 
@@ -129,11 +133,44 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
       ((userClickY - headerHeight) / imageHeight) * 100,
     );
     setCoordinates([absCoordinateX, absCoordinateY]);
-
     setPosition([e.pageX - 38, e.pageY - 38]);
     setMenuVisible(true);
-    getScore()
   };
+
+  const sendCoordinates = async () => {
+    const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/move`;
+    const data = { coordinates, character: characterId };
+    fetch(apiURL, {
+      method: "post",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (response.status === 400) {
+          throw new Error(`The coordinates didn't match`);
+        }
+        if (response.status === 401) {
+          throw new Error(`The gameboard doesn't match the session cookie`);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        console.log("sucess ", response);
+        setCharacterId("");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
+  useEffect(() => {
+    if (characterId !== "") sendCoordinates();
+  }, [characterId]);
+
   return (
     <div className={styles.gameboard}>
       <Header time={timeString} />
@@ -147,6 +184,7 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
         menuVisible={menuVisible}
         setMenuVisible={setMenuVisible}
         position={position}
+        setCharacterId={setCharacterId}
       />
     </div>
   );

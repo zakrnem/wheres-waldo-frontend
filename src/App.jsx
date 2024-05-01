@@ -8,7 +8,7 @@ import ErrorPage from "./ErrorPage/ErrorPage";
 function App() {
   const [error, setError] = useState({ state: false });
   const [menuVisible, setMenuVisible] = useState(false);
-  const [gameboardId, setGameboardId] = useState('66244310eee0531455982e73')
+  const [gameboardId, setGameboardId] = useState("66244310eee0531455982e73");
 
   return (
     <>
