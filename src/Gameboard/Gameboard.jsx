@@ -82,6 +82,35 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
       });
   }
 
+  const getScore = async() => {
+    const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/end`;
+    await fetch(apiURL, {
+      method: "post",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `This is an HTTP error: The status is ${response.status}`,
+          );
+        }
+        return response.json();
+      })
+      .then((response) => {
+        console.log("Score: ", response.time)
+        const currentTime = Math.floor(response.time)
+        setTime(currentTime)
+        setIsRunning(false)
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }
+
   useEffect(() => {
     console.log("Inner html position: ", position);
     console.log("Absolute coordinates: ", coordinates);
@@ -103,6 +132,7 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
 
     setPosition([e.pageX - 38, e.pageY - 38]);
     setMenuVisible(true);
+    getScore()
   };
   return (
     <div className={styles.gameboard}>
