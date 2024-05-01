@@ -4,10 +4,9 @@ import Header from "../Header/Header";
 import SelectionMenu from "../SelectionMenu/SelectionMenu";
 import { useEffect, useState } from "react";
 
-function Gameboard({ menuVisible, setMenuVisible }) {
+function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
   const [position, setPosition] = useState([0, 0]);
   const [coordinates, setCoordinates] = useState([0, 0]);
-  const gameboardId = "66244310eee0531455982e73";
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [timeString, setTimeString] = useState("00:00");
@@ -17,17 +16,14 @@ function Gameboard({ menuVisible, setMenuVisible }) {
     if (isRunning) {
       intervalId = setInterval(() => setTime(time + 1), 1000);
     }
-    return () => clearInterval(intervalId);
-  }, [isRunning, time]);
-
-  useEffect(() => {
     const minutes = Math.floor(time / 60);
     const seconds = (time > 59) ? time-(60*(Math.floor(time/60))) : time;
     setTimeString(
       `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`,
     );
-  }, [time]);
 
+    return () => clearInterval(intervalId);
+  }, [isRunning, time]);
 
   useEffect(() => {
     const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/start`;
