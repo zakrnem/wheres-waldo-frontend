@@ -22,28 +22,28 @@ function SelectionMenu({
           <MenuCharacter
             image={waldo}
             name={"Waldo"}
-            id={"66244310eee0531455982e75"}
+            id={"6632d6710c27cd1c7ff4df09"}
             styles={styles}
             setCharacterId={setCharacterId}
           />
           <MenuCharacter
             image={wenda}
             name={"Wenda"}
-            id={"66244310eee0531455982e76"}
+            id={"6632d6710c27cd1c7ff4df0a"}
             styles={styles}
             setCharacterId={setCharacterId}
           />
           <MenuCharacter
             image={odlaw}
             name={"Odlaw"}
-            id={"66244310eee0531455982e77"}
+            id={"6632d6710c27cd1c7ff4df0b"}
             styles={styles}
             setCharacterId={setCharacterId}
           />
           <MenuCharacter
             image={wizard}
             name={"Wizard"}
-            id={"66244310eee0531455982e78"}
+            id={"6632d6710c27cd1c7ff4df0c"}
             styles={styles}
             setCharacterId={setCharacterId}
           />

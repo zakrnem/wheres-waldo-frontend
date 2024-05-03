@@ -108,6 +108,7 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
         const currentTime = Math.floor(response.time);
         setTime(currentTime);
         setIsRunning(false);
+        // Implement gameover window that shows the user his score
       })
       .catch((error) => {
         console.log(error.message);
@@ -156,11 +157,13 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
         if (response.status === 401) {
           throw new Error(`The gameboard doesn't match the session cookie`);
         }
+        if (response.status === 201) {
+          getScore()
+        }
         return response.json();
       })
       .then((response) => {
-        console.log("sucess ", response);
-        setCharacterId("");
+        console.log(response);
       })
       .catch((error) => {
         console.log(error.message);
