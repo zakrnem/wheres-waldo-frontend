@@ -3,6 +3,7 @@ import styles from "./Gameboard.module.css";
 import Header from "../Header/Header";
 import SelectionMenu from "../SelectionMenu/SelectionMenu";
 import { useEffect, useState } from "react";
+import GameoverWindow from "./GameoverWindow";
 
 function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
   const [position, setPosition] = useState([0, 0]);
@@ -11,6 +12,7 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
   const [isRunning, setIsRunning] = useState(false);
   const [timeString, setTimeString] = useState("00:00");
   const [characterId, setCharacterId] = useState("");
+  const [gameover, setGameover] = useState(false);
 
   // Stopwatch
   useEffect(() => {
@@ -108,18 +110,12 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
         const currentTime = Math.floor(response.time);
         setTime(currentTime);
         setIsRunning(false);
-        // Implement gameover window that shows the user his score
+        setGameover(true);
       })
       .catch((error) => {
         console.log(error.message);
       });
   };
-
-  // Log user input
-  useEffect(() => {
-    // console.log("Inner html position: ", position);
-    console.log("Absolute coordinates: ", coordinates);
-  }, [position, coordinates]);
 
   const handleClick = (e) => {
     const userClickX = e.pageX;
@@ -135,7 +131,7 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
     );
     setCoordinates([absCoordinateX, absCoordinateY]);
     setPosition([e.pageX - 38, e.pageY - 38]);
-    setMenuVisible(true);
+    if (!gameover) setMenuVisible(true);
   };
 
   const sendCoordinates = async () => {
@@ -158,7 +154,7 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
           throw new Error(`The gameboard doesn't match the session cookie`);
         }
         if (response.status === 201) {
-          getScore()
+          getScore();
         }
         return response.json();
       })
@@ -177,6 +173,7 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
   return (
     <div className={styles.gameboard}>
       <Header time={timeString} />
+      <GameoverWindow score={time} gameover={gameover} />
       <img
         src={gameImage}
         id="gameimage"

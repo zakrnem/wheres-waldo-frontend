@@ -1,0 +1,22 @@
+.window {
+  display: grid;
+  background-color: var(--light-tertiary);
+  opacity: 0.95;
+  padding: 2rem 3rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 1.5rem;
+}
+
+.window > p {
+  font-size: 2rem;
+  font-weight: bolder;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  justify-self: center;
+}
