@@ -26,7 +26,10 @@ function App() {
             />
           }
         />
-        <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route
+          path="/leaderboard"
+          element={<Leaderboard gameboardId={gameboardId} />}
+        />
         <Route
           path="*"
           element={<ErrorPage error={error} setError={setError} />}
