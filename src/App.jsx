@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import Gameboard from "./Gameboard/Gameboard";
 import Leaderboard from "./Leaderboard/Leaderboard";
@@ -8,7 +8,34 @@ import ErrorPage from "./ErrorPage/ErrorPage";
 function App() {
   const [error, setError] = useState({ state: false });
   const [menuVisible, setMenuVisible] = useState(false);
-  const [gameboardId, setGameboardId] = useState("6632d6710c27cd1c7ff4df07");
+  const [gameboardId, setGameboardId] = useState("");
+
+  useEffect(() => {
+    const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/`
+    fetch(apiURL, {
+      method: "get",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `This is an HTTP error: The status is ${response.status}`,
+          );
+        }
+        return response.json();
+      })
+      .then((response) => {
+        const firstGameboard = response[0]._id
+        setGameboardId(firstGameboard)
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }, [])
 
   return (
     <>
