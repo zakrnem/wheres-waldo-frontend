@@ -5,7 +5,13 @@ import SelectionMenu from "../SelectionMenu/SelectionMenu";
 import { useEffect, useState } from "react";
 import GameoverWindow from "./GameoverWindow";
 
-function Gameboard({ menuVisible, setMenuVisible, gameboardId, characters }) {
+function Gameboard({
+  menuVisible,
+  setMenuVisible,
+  gameboardId,
+  characters,
+  getGameboardId,
+}) {
   const [position, setPosition] = useState([0, 0]);
   const [coordinates, setCoordinates] = useState([0, 0]);
   const [time, setTime] = useState(0);
@@ -31,33 +37,37 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId, characters }) {
 
   // Start stopwatch request
   useEffect(() => {
-    const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/start`;
-    fetch(apiURL, {
-      method: "post",
-      credentials: "include",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(
-            `This is an HTTP error: The status is ${response.status}`,
-          );
-        } else {
-          setIsRunning(true);
-        }
-        return response.json();
+    if (gameboardId === "") {
+      getGameboardId();
+    } else {
+      const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/start`;
+      fetch(apiURL, {
+        method: "post",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
       })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        getCurrentTime();
-        console.log(error.message);
-      });
-  }, []);
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              `This is an HTTP error: The status is ${response.status}`,
+            );
+          } else {
+            setIsRunning(true);
+          }
+          return response.json();
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          getCurrentTime();
+          console.log(error.message);
+        });
+    }
+  }, [gameboardId]);
 
   const getCurrentTime = async () => {
     const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/current`;
@@ -106,12 +116,11 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId, characters }) {
         return response.json();
       })
       .then((response) => {
-        console.log("Score: ", response.time);
         const currentTime = Math.floor(response.time);
         setTime(currentTime);
         setIsRunning(false);
         setGameover(true);
-        saveScore();
+        //saveScore();
       })
       .catch((error) => {
         console.log(error.message);
@@ -148,6 +157,33 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId, characters }) {
       body: JSON.stringify(data),
     })
       .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `This is an HTTP error: The status is ${response.status}`,
+          );
+        }
+        return response.json();
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
+  const saveScore = async () => {
+    const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/score`;
+    fetch(apiURL, {
+      method: "post",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(time),
+    })
+      .then((response) => {
         if (response.status === 400) {
           throw new Error(`The coordinates didn't match`);
         }
@@ -165,10 +201,6 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId, characters }) {
       .catch((error) => {
         console.log(error.message);
       });
-  };
-
-  const saveScore = async () => {
-    console.log(currentTime);
   };
 
   useEffect(() => {

@@ -12,7 +12,7 @@ function App() {
   const [characters, setCharacters] = useState([]);
 
   // Fetch gameboard ID
-  useEffect(() => {
+  const getGameboardId = async () => {
     const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/`;
     fetch(apiURL, {
       method: "get",
@@ -38,7 +38,7 @@ function App() {
       .catch((error) => {
         console.log(error.message);
       });
-  }, []);
+  };
 
   // Fetch characters array
   const getCharacters = async (gamebId) => {
@@ -81,6 +81,7 @@ function App() {
               setMenuVisible={setMenuVisible}
               gameboardId={gameboardId}
               characters={characters}
+              getGameboardId={getGameboardId}
             />
           }
         />
