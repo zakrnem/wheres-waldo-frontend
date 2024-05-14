@@ -5,7 +5,7 @@ import SelectionMenu from "../SelectionMenu/SelectionMenu";
 import { useEffect, useState } from "react";
 import GameoverWindow from "./GameoverWindow";
 
-function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
+function Gameboard({ menuVisible, setMenuVisible, gameboardId, characters }) {
   const [position, setPosition] = useState([0, 0]);
   const [coordinates, setCoordinates] = useState([0, 0]);
   const [time, setTime] = useState(0);
@@ -111,6 +111,7 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
         setTime(currentTime);
         setIsRunning(false);
         setGameover(true);
+        saveScore();
       })
       .catch((error) => {
         console.log(error.message);
@@ -166,6 +167,10 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
       });
   };
 
+  const saveScore = async () => {
+    console.log(currentTime);
+  };
+
   useEffect(() => {
     if (characterId !== "") sendCoordinates();
   }, [characterId]);
@@ -185,6 +190,7 @@ function Gameboard({ menuVisible, setMenuVisible, gameboardId }) {
         setMenuVisible={setMenuVisible}
         position={position}
         setCharacterId={setCharacterId}
+        characters={characters}
       />
     </div>
   );

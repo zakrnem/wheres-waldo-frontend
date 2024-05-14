@@ -28,7 +28,7 @@ function Leaderboard({ gameboardId }) {
       })
       .then((response) => {
         setScores(response);
-        setLoading(false)
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error.message);
