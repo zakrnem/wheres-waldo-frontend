@@ -2,9 +2,9 @@
   display: grid;
   background-color: var(--light-tertiary);
   opacity: 0.95;
-  padding: 2rem 3rem;
+  padding: 7rem 8rem;
   position: absolute;
-  top: 50%;
+  top: 80%;
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 1.5rem;

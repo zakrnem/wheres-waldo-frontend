@@ -119,8 +119,8 @@ function Gameboard({
         const currentTime = Math.floor(response.time);
         setTime(currentTime);
         setIsRunning(false);
+        saveScore();
         setGameover(true);
-        //saveScore();
       })
       .catch((error) => {
         console.log(error.message);
@@ -162,10 +162,13 @@ function Gameboard({
             `This is an HTTP error: The status is ${response.status}`,
           );
         }
+        if (response.status === 201) {
+          getScore()
+        }
         return response.json();
       })
       .then((response) => {
-        console.log(response);
+        console.log("sendCoordinates response ", response);
       })
       .catch((error) => {
         console.log(error.message);
@@ -189,9 +192,6 @@ function Gameboard({
         }
         if (response.status === 401) {
           throw new Error(`The gameboard doesn't match the session cookie`);
-        }
-        if (response.status === 201) {
-          getScore();
         }
         return response.json();
       })
