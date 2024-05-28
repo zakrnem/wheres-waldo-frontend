@@ -69,6 +69,7 @@ function Gameboard({
     }
   }, [gameboardId]);
 
+  // Sets timer on page refresh
   const getCurrentTime = async () => {
     const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/current`;
     await fetch(apiURL, {
@@ -97,6 +98,7 @@ function Gameboard({
       });
   };
 
+  // Gameover callbacks
   const getScore = async () => {
     const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/end`;
     await fetch(apiURL, {
@@ -117,15 +119,16 @@ function Gameboard({
       })
       .then((response) => {
         const currentTime = Math.floor(response.time);
+        setGameover(true)
         setTime(currentTime);
         setIsRunning(false);
         saveScore();
-        setGameover(true);
       })
       .catch((error) => {
         console.log(error.message);
       });
   };
+
 
   const handleClick = (e) => {
     const userClickX = e.pageX;
@@ -141,7 +144,7 @@ function Gameboard({
     );
     setCoordinates([absCoordinateX, absCoordinateY]);
     setPosition([e.pageX - 38, e.pageY - 38]);
-    if (!gameover) setMenuVisible(true);
+    !gameover ? setMenuVisible(true) : setMenuVisible(false);
   };
 
   const sendCoordinates = async () => {
@@ -162,7 +165,7 @@ function Gameboard({
             `This is an HTTP error: The status is ${response.status}`,
           );
         }
-        if (response.status === 201) {
+        if (response.status === 201) { // Gameover status code
           getScore()
         }
         return response.json();
@@ -177,6 +180,7 @@ function Gameboard({
 
   const saveScore = async () => {
     const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/score`;
+    console.log("saveScore executed ", apiURL, time)
     fetch(apiURL, {
       method: "post",
       credentials: "include",
@@ -219,7 +223,6 @@ function Gameboard({
       />
       <SelectionMenu
         menuVisible={menuVisible}
-        setMenuVisible={setMenuVisible}
         position={position}
         setCharacterId={setCharacterId}
         characters={characters}
