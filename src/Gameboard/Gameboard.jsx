@@ -98,8 +98,60 @@ function Gameboard({
       });
   };
 
+  const handleClick = (e) => {
+    const userClickX = e.pageX;
+    const userClickY = e.pageY;
+
+    const headerHeight = document.querySelector("#header").offsetHeight;
+    const imageWidth = document.querySelector("#gameimage").offsetWidth;
+    const imageHeight = document.querySelector("#gameimage").offsetHeight;
+
+    const absCoordinateX = Math.round((userClickX / imageWidth) * 100);
+    const absCoordinateY = Math.round(
+      ((userClickY - headerHeight) / imageHeight) * 100,
+    );
+    setCoordinates([absCoordinateX, absCoordinateY]);
+    setPosition([e.pageX - 38, e.pageY - 38]);
+    !gameover ? setMenuVisible(true) : setMenuVisible(false);
+  };
+
+  useEffect(() => {
+    if (characterId !== "") sendCoordinates();
+  }, [characterId]);
+
+  const sendCoordinates = async () => {
+    const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/move`;
+    const data = { coordinates, character: characterId };
+    fetch(apiURL, {
+      method: "post",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `This is an HTTP error: The status is ${response.status}`,
+          );
+        }
+        if (response.status === 201) { // Gameover status code
+          executeGameover()
+        }
+        return response.json();
+      })
+      .then((response) => {
+        console.log("sendCoordinates response ", response);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
   // Gameover callbacks
-  const getScore = async () => {
+  const executeGameover = async () => {
     const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/end`;
     await fetch(apiURL, {
       method: "post",
@@ -123,55 +175,6 @@ function Gameboard({
         setTime(currentTime);
         setIsRunning(false);
         saveScore();
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
-
-
-  const handleClick = (e) => {
-    const userClickX = e.pageX;
-    const userClickY = e.pageY;
-
-    const headerHeight = document.querySelector("#header").offsetHeight;
-    const imageWidth = document.querySelector("#gameimage").offsetWidth;
-    const imageHeight = document.querySelector("#gameimage").offsetHeight;
-
-    const absCoordinateX = Math.round((userClickX / imageWidth) * 100);
-    const absCoordinateY = Math.round(
-      ((userClickY - headerHeight) / imageHeight) * 100,
-    );
-    setCoordinates([absCoordinateX, absCoordinateY]);
-    setPosition([e.pageX - 38, e.pageY - 38]);
-    !gameover ? setMenuVisible(true) : setMenuVisible(false);
-  };
-
-  const sendCoordinates = async () => {
-    const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/move`;
-    const data = { coordinates, character: characterId };
-    fetch(apiURL, {
-      method: "post",
-      credentials: "include",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(
-            `This is an HTTP error: The status is ${response.status}`,
-          );
-        }
-        if (response.status === 201) { // Gameover status code
-          getScore()
-        }
-        return response.json();
-      })
-      .then((response) => {
-        console.log("sendCoordinates response ", response);
       })
       .catch((error) => {
         console.log(error.message);
@@ -206,10 +209,6 @@ function Gameboard({
         console.log(error.message);
       });
   };
-
-  useEffect(() => {
-    if (characterId !== "") sendCoordinates();
-  }, [characterId]);
 
   return (
     <div className={styles.gameboard}>
