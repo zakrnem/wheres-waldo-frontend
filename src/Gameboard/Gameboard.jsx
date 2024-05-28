@@ -19,6 +19,7 @@ function Gameboard({
   const [timeString, setTimeString] = useState("00:00");
   const [characterId, setCharacterId] = useState("");
   const [gameover, setGameover] = useState(false);
+  const [inverseMenu, setInverseMenu] = useState(false);
 
   // Stopwatch
   useEffect(() => {
@@ -110,8 +111,17 @@ function Gameboard({
     const absCoordinateY = Math.round(
       ((userClickY - headerHeight) / imageHeight) * 100,
     );
+
+    let menuOffset = 38;
+    if (absCoordinateY > 60) {
+      setInverseMenu(true);
+      menuOffset = 405;
+    } else {
+      setInverseMenu(false);
+    }
+
     setCoordinates([absCoordinateX, absCoordinateY]);
-    setPosition([e.pageX - 38, e.pageY - 38]);
+    setPosition([e.pageX - 38, e.pageY - menuOffset]);
     !gameover ? setMenuVisible(true) : setMenuVisible(false);
   };
 
@@ -137,8 +147,9 @@ function Gameboard({
             `This is an HTTP error: The status is ${response.status}`,
           );
         }
-        if (response.status === 201) { // Gameover status code
-          executeGameover()
+        if (response.status === 201) {
+          // Gameover status code
+          executeGameover();
         }
         return response.json();
       })
@@ -171,7 +182,8 @@ function Gameboard({
       })
       .then((response) => {
         const currentTime = Math.floor(response.time);
-        setGameover(true)
+        setGameover(true);
+        setMenuVisible(false)
         setTime(currentTime);
         setIsRunning(false);
         saveScore();
@@ -183,7 +195,7 @@ function Gameboard({
 
   const saveScore = async () => {
     const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/score`;
-    console.log("saveScore executed ", apiURL, time)
+    console.log("saveScore executed ", apiURL, time);
     fetch(apiURL, {
       method: "post",
       credentials: "include",
@@ -223,8 +235,10 @@ function Gameboard({
       <SelectionMenu
         menuVisible={menuVisible}
         position={position}
+        coordinates={coordinates}
         setCharacterId={setCharacterId}
         characters={characters}
+        inverseMenu={inverseMenu}
       />
     </div>
   );
