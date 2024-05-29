@@ -19,7 +19,7 @@ function Gameboard({
   const [timeString, setTimeString] = useState("00:00");
   const [characterId, setCharacterId] = useState("");
   const [gameover, setGameover] = useState(false);
-  const [inverseMenu, setInverseMenu] = useState(false);
+  const [inverseMenu, setInverseMenu] = useState(false); 
 
   // Stopwatch
   useEffect(() => {
@@ -183,19 +183,17 @@ function Gameboard({
       .then((response) => {
         const currentTime = Math.floor(response.time);
         setGameover(true);
-        setMenuVisible(false)
+        setMenuVisible(false);
         setTime(currentTime);
         setIsRunning(false);
-        saveScore();
       })
       .catch((error) => {
         console.log(error.message);
       });
   };
 
-  const saveScore = async () => {
+  const saveScore = async (user) => {
     const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/score`;
-    console.log("saveScore executed ", apiURL, time);
     fetch(apiURL, {
       method: "post",
       credentials: "include",
@@ -203,7 +201,7 @@ function Gameboard({
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(time),
+      body: JSON.stringify({ time, user }),
     })
       .then((response) => {
         if (response.status === 400) {
@@ -225,7 +223,11 @@ function Gameboard({
   return (
     <div className={styles.gameboard}>
       <Header time={timeString} />
-      <GameoverWindow score={time} gameover={gameover} />
+      <GameoverWindow
+        score={time}
+        gameover={gameover}
+        saveScore={saveScore}
+      />
       <img
         src={gameImage}
         id="gameimage"

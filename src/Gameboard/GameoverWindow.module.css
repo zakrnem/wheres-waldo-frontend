@@ -11,12 +11,29 @@
 }
 
 .window > p {
-  font-size: 2rem;
+  font-size: 3ch;
+  font-weight: bolder;
+  margin: 0;
+}
+
+.title {
+  font-size: 4ch;
   font-weight: bolder;
 }
 
-.buttons {
-  display: flex;
-  gap: 1rem;
-  justify-self: center;
+.form {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+input[type="text"] {
+  border-radius: 0.5rem;
+  border: none;
+  padding: 0.5rem;
+}
+
+.form > button {
+  margin-top: 1rem;
 }
