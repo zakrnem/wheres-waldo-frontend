@@ -193,7 +193,7 @@ function Gameboard({
   };
 
   const saveScore = async (user) => {
-    const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/score`;
+    const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/scores`;
     fetch(apiURL, {
       method: "post",
       credentials: "include",

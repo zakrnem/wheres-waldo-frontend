@@ -4,7 +4,9 @@
 }
 
 .item {
+  display: grid;
   justify-self: center;
+  justify-items: center;
 }
 
 .title {
@@ -27,7 +29,7 @@
   content: " ";
   display: block;
   border-bottom: solid 2px rgb(33, 53, 71);
-  width: 100%;
+  width: 16ch;
   margin-top: 1rem;
 }
 
