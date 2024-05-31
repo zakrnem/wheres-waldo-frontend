@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 function MenuCharacter({ image, name, id, styles, setCharacterId }) {
   return (
     <button

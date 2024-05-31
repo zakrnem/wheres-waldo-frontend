@@ -18,9 +18,15 @@
   display: inline;
   background-color: var(--dark-color);
   border-radius: 1.5rem;
-  opacity: 0.9;
+  opacity: 0.8;
   color: white;
   font-size: 0.9rem;
+}
+
+.mcharacter:hover {
+  background-color: white;
+  opacity: 0.8;
+  color: black;
 }
 
 .mcharacter > img {
