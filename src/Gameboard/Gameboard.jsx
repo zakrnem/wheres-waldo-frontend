@@ -4,6 +4,7 @@ import Header from "../Header/Header";
 import SelectionMenu from "../SelectionMenu/SelectionMenu";
 import { useEffect, useState } from "react";
 import GameoverWindow from "./GameoverWindow";
+import GameboardHits from "./GameboardHits";
 
 function Gameboard({
   menuVisible,
@@ -13,13 +14,15 @@ function Gameboard({
   getGameboardId,
 }) {
   const [position, setPosition] = useState([0, 0]);
+  const [userCoordinates, setUserCoordinates] = useState([0, 0]);
   const [coordinates, setCoordinates] = useState([0, 0]);
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [timeString, setTimeString] = useState("00:00");
   const [characterId, setCharacterId] = useState("");
   const [gameover, setGameover] = useState(false);
-  const [inverseMenu, setInverseMenu] = useState(false); 
+  const [inverseMenu, setInverseMenu] = useState(false);
+  const [hits, setHits] = useState([]);
 
   // Stopwatch
   useEffect(() => {
@@ -100,16 +103,15 @@ function Gameboard({
   };
 
   const handleClick = (e) => {
-    const userClickX = e.pageX;
-    const userClickY = e.pageY;
+    setUserCoordinates([e.pageX - 38, e.pageY - 38]);
 
     const headerHeight = document.querySelector("#header").offsetHeight;
     const imageWidth = document.querySelector("#gameimage").offsetWidth;
     const imageHeight = document.querySelector("#gameimage").offsetHeight;
 
-    const absCoordinateX = Math.round((userClickX / imageWidth) * 100);
+    const absCoordinateX = Math.round((e.pageX / imageWidth) * 100);
     const absCoordinateY = Math.round(
-      ((userClickY - headerHeight) / imageHeight) * 100,
+      ((e.pageY - headerHeight) / imageHeight) * 100,
     );
 
     let menuOffset = 38;
@@ -128,6 +130,10 @@ function Gameboard({
   useEffect(() => {
     if (characterId !== "") sendCoordinates();
   }, [characterId]);
+
+  const addHit = (position) => {
+    setHits((prevHits) => [...prevHits, position]);
+  };
 
   const sendCoordinates = async () => {
     const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/move`;
@@ -148,12 +154,12 @@ function Gameboard({
           );
         }
         if (response.status === 201) {
-          // Gameover status code
           executeGameover();
         }
         return response.json();
       })
       .then((response) => {
+        addHit(userCoordinates);
         console.log("sendCoordinates response ", response);
       })
       .catch((error) => {
@@ -161,7 +167,6 @@ function Gameboard({
       });
   };
 
-  // Gameover callbacks
   const executeGameover = async () => {
     const apiURL = `${import.meta.env.VITE_API_URL}/gameboards/${gameboardId}/end`;
     await fetch(apiURL, {
@@ -223,11 +228,7 @@ function Gameboard({
   return (
     <div className={styles.gameboard}>
       <Header time={timeString} />
-      <GameoverWindow
-        score={time}
-        gameover={gameover}
-        saveScore={saveScore}
-      />
+      <GameoverWindow score={time} gameover={gameover} saveScore={saveScore} />
       <img
         src={gameImage}
         id="gameimage"
@@ -242,6 +243,7 @@ function Gameboard({
         characters={characters}
         inverseMenu={inverseMenu}
       />
+      <GameboardHits hits={hits} />
     </div>
   );
 }

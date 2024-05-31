@@ -8,7 +8,7 @@ function GameoverWindow({ score, gameover, saveScore }) {
     e.preventDefault();
     const username = document.getElementById("username").value;
     if (username !== "") {
-      saveScore(username)
+      saveScore(username);
       navigate("/leaderboard");
     } else {
       const message = document.getElementById("message");

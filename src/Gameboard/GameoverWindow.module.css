@@ -4,6 +4,7 @@
   opacity: 0.95;
   padding: 7rem 8rem;
   position: absolute;
+  z-index: 3;
   top: 80%;
   left: 50%;
   transform: translate(-50%, -50%);

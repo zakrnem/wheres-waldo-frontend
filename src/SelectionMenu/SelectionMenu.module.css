@@ -4,6 +4,7 @@
   gap: 0.2rem;
   width: fit-content;
   position: absolute;
+  z-index: 2;
 }
 
 .characters {
