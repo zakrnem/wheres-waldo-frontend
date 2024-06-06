@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import Gameboard from "./Gameboard/Gameboard";
 import Leaderboard from "./Leaderboard/Leaderboard";
